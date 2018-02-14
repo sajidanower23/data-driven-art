@@ -149,7 +149,6 @@ def dev_read_file():
     dev_file_name = 'a.out'
     freq_list = []
     with open(dev_file_name, 'r') as f:
-        all_data = f.read()
         freq_list = [float(line) for line in f]
     return freq_list
 
