@@ -98,6 +98,8 @@ class Tree(object):
 
     def depthProducer(self, frequency):
         self.depth = 5
+    def set_depth(self, new_depth):
+        self.depth = new_depth
 
 def test():
     fileName = sys.argv[1]
@@ -132,14 +134,14 @@ def test():
             if keyinput is not None:
                 if keyinput[pygame.K_ESCAPE]:
                     sys.exit(1)
-            if pause is not True:
-                surface.fill((0, 0, 0, 255))
-                for thing in spheres:
-
-                    thing.storyboard.append([thing.colourProducer, [freq]])
-                    thing.storyboard.append([thing.depthProducer, [freq]])
-
-                    thing.update()
+            if pause == False:
+                # print("AAAAAAAA")
+                surface.fill((0, 0, 0, 0))
+                for tree in spheres:
+                    # tree.storyboard.append([tree.colourProducer, [freq]])
+                    # tree.storyboard.append([tree.depthProducer, [freq]])
+                    tree.set_depth(int(freq // 100))
+                    tree.update()
                 pygame.display.flip()
     except KeyboardInterrupt:
         print('shutting down')
