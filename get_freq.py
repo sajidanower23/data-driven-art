@@ -3,7 +3,6 @@
 import pyaudio
 import wave
 import numpy as np
-import sys
 
 def get_freq_list(audio_file):
     chunk = 2048
