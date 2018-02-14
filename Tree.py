@@ -102,7 +102,11 @@ class Tree(object):
 def test():
     fileName = sys.argv[1]
     print('preprocessing file')
-    data = get_freq_list(fileName)
+    try:
+        sys.argv[2]
+        data = dev_read_file()
+    except:
+        data = get_freq_list(fileName)
     print('processed file, starting application')
     try:
         fps = 1 # guaranteed 1fps
@@ -140,6 +144,14 @@ def test():
     except KeyboardInterrupt:
         print('shutting down')
         s.stop()
+
+def dev_read_file():
+    dev_file_name = 'a.out'
+    freq_list = []
+    with open(dev_file_name, 'r') as f:
+        all_data = f.read()
+        freq_list = [float(line) for line in f]
+    return freq_list
 
 if __name__ == '__main__':
     test()
