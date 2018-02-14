@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 
+# FoozTree
+
 import pygame
 import sys
 import math
@@ -94,10 +96,18 @@ class Tree(object):
         self.initialize()
 
     def colourProducer(self, frequency):
-        self.color = pygame.Color(255, 255, 0)
+        print('in color producer')
+        #self.color = pygame.Color(255, 255, 0)
+        print(bound(frequency//10*3), 255-bound(frequency//10*3), bound(frequency//10*3))
+        self.color = pygame.Color(bound(frequency//10*3), 255-bound(frequency//10*3), bound(frequency//10*3))
 
     def depthProducer(self, frequency):
-        self.depth = 5
+        print('in depth producer')
+        #self.depth = 2
+        self.depth = frequency//100
+
+def bound(c):
+    return int(max(0, min(255, c)))
 
 def test():
     fileName = sys.argv[1]
@@ -129,12 +139,12 @@ def test():
                 if keyinput[pygame.K_ESCAPE]:
                     sys.exit(1)
             if pause is not True:
-                surface.fill((0, 0, 0, 255))
                 for thing in spheres:
-
-                    thing.storyboard.append([thing.colourProducer, [freq]])
-                    thing.storyboard.append([thing.depthProducer, [freq]])
-
+                    surface.fill((0, 0, 0, 255))
+                    #thing.storyboard.append([thing.colourProducer, [freq]])
+                    #thing.storyboard.append([thing.depthProducer, [freq]])
+                    thing.colourProducer(freq)
+                    thing.depthProducer(freq)
                     thing.update()
                 pygame.display.flip()
     except KeyboardInterrupt:
