@@ -56,7 +56,9 @@ class Tree(object):
         if depth == 0:
             if self.leafs is True:
                 leaf_color = (random.randint(16, 65), int(length * 2 + 40), 0)
+                #print('might be about to fail', leaf_color)
                 self.storyboard.append((pygame.draw.ellipse, (self.surface, leaf_color, (int(root.x), int(root.y), 10, 10), 0)))
+                #print('didnt fail')
             return
         # forward
         root = self.draw(root, angle, length, self.depth // 2)
@@ -84,17 +86,22 @@ class Tree(object):
 
     def update(self):
         """update every frame"""
+        print('mght be about to fail')
         for func, args in self.storyboard:
+            print(func)
+            print(args)
             func(*args)
+        self.depth += 1
+        self.initialize()
+        print('didnt fail')
 
 def test():
     try:
-        fps = 5
+        fps = 1 # guaranteed 1fps
         surface = pygame.display.set_mode((600, 600))
         pygame.init()
         spheres = (
-            Tree(surface, pygame.Color(255, 255, 0), Vec2d(300, 500), 8, 250),
-            Tree(surface, pygame.Color(255, 255, 0), Vec2d(330, 500), 5, 100),
+            [Tree(surface, pygame.Color(255, 255, 0), Vec2d(300, 500), 2, 250)]#8, 250)]
             )
         clock = pygame.time.Clock()       
         pause = False
@@ -118,3 +125,37 @@ def test():
 
 if __name__ == '__main__':
     test()
+
+'''
+12:12 $ python3 Tree.py 
+Traceback (most recent call last):
+  File "Tree.py", line 121, in <module>
+    test()
+  File "Tree.py", line 115, in test
+    thing.update()
+  File "Tree.py", line 88, in update
+    func(*args)
+TypeError: invalid color argument
+
+'''
+
+
+'''
+mght be about to fail
+<built-in function line>
+(<Surface(600x600x32 SW)>, (255, 255, 0, 255), Vec2d(300, 500), Vec2d(300.0, 250.0), 1)
+<built-in function line>
+(<Surface(600x600x32 SW)>, (255, 255, 0, 255), Vec2d(300.0, 250.0), Vec2d(178.0925982419671, 128.0925982419671), 1)
+<built-in function ellipse>
+(<Surface(600x600x32 SW)>, (24, 275, 0), (178, 128, 10, 10), 0)
+Traceback (most recent call last):
+  File "Tree.py", line 127, in <module>
+    test()
+  File "Tree.py", line 121, in test
+    thing.update()
+  File "Tree.py", line 93, in update
+    func(*args)
+TypeError: invalid color argument
+
+
+'''
