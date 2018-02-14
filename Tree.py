@@ -132,8 +132,8 @@ def test():
                 surface.fill((0, 0, 0, 255))
                 for thing in spheres:
 
-                    thing.storyboard.append(thing.colourProducer, freq)
-                    thing.storyboard.append(thing.depthProducer, freq)
+                    thing.storyboard.append([thing.colourProducer, [freq]])
+                    thing.storyboard.append([thing.depthProducer, [freq]])
 
                     thing.update()
                 pygame.display.flip()
