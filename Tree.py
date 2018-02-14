@@ -6,7 +6,7 @@ import math
 import random
 # own modules
 from Vec2d import Vec2d
-
+from get_freq import get_freq_list
 
 class Tree(object):
     """Tree in 2D"""
@@ -55,9 +55,10 @@ class Tree(object):
         """this method is recurdively called"""
         if depth == 0:
             if self.leafs is True:
-                leaf_color = (random.randint(16, 65), int(length * 2 + 40), 0)
+                #leaf_color = (random.randint(16, 65), int(length * 2 + 40), 0)
                 #print('might be about to fail', leaf_color)
-                self.storyboard.append((pygame.draw.ellipse, (self.surface, leaf_color, (int(root.x), int(root.y), 10, 10), 0)))
+                #self.storyboard.append((pygame.draw.ellipse, (self.surface, leaf_color, (int(root.x), int(root.y), 10, 10), 0)))
+                self.storyboard.append((pygame.draw.ellipse, (self.surface, self.color, (int(root.x), int(root.y), 10, 10), 0)))
                 #print('didnt fail')
             return
         # forward
@@ -76,9 +77,11 @@ class Tree(object):
         root = self.draw(root, angle, -length, self.depth // 2)
         # we are at root
 
+    '''
     def set_color(self, color):
         """set color"""
         self.color = color
+    '''
 
     def initialize(self):
         """initialize tree"""
@@ -86,30 +89,40 @@ class Tree(object):
 
     def update(self):
         """update every frame"""
-        print('mght be about to fail')
         for func, args in self.storyboard:
-            print(func)
-            print(args)
             func(*args)
-        self.depth += 1
         self.initialize()
-        print('didnt fail')
+
+    def colourProducer(self, frequency):
+        self.color = pygame.Color(255, 255, 0)
+
+    def depthProducer(self, frequency):
+        self.depth = 5
 
 def test():
+    fileName = sys.argv[1]
+    print('preprocessing file')
+    data = get_freq_list(fileName)
+    print('processed file, starting application')
     try:
         fps = 1 # guaranteed 1fps
         surface = pygame.display.set_mode((600, 600))
         pygame.init()
+        sound = pygame.mixer.Sound(fileName)
         spheres = (
             [Tree(surface, pygame.Color(255, 255, 0), Vec2d(300, 500), 2, 250)]#8, 250)]
             )
-        clock = pygame.time.Clock()       
+        clock = pygame.time.Clock()
+
+        sound.play()
+   
         pause = False
-        while True:
+        #while True:
+        for freq in data:
             clock.tick(fps)
             events = pygame.event.get()  
-            for event in events:  
-                if event.type == pygame.QUIT:  
+            for event in events:
+                if event.type == pygame.QUIT:
                     sys.exit(0)
             keyinput = pygame.key.get_pressed()
             if keyinput is not None:
@@ -118,10 +131,15 @@ def test():
             if pause is not True:
                 surface.fill((0, 0, 0, 255))
                 for thing in spheres:
+
+                    thing.storyboard.append(thing.colourProducer, freq)
+                    thing.storyboard.append(thing.depthProducer, freq)
+
                     thing.update()
                 pygame.display.flip()
     except KeyboardInterrupt:
         print('shutting down')
+        s.stop()
 
 if __name__ == '__main__':
     test()

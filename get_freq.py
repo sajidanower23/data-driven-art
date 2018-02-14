@@ -2,13 +2,11 @@
 import pyaudio
 import wave
 import numpy as np
-import sys
 
-def get_freq_list():
+def get_freq_list(audio_file):
     chunk = 2048
 
     # open up a wave
-    audio_file = sys.argv[1]
     wf = wave.open(audio_file, 'rb')
     swidth = wf.getsampwidth()
     RATE = wf.getframerate()
