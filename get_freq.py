@@ -1,14 +1,14 @@
+#!/usr/bin/env python3
 # Read in a WAV and find the freq's
 import pyaudio
 import wave
 import numpy as np
 import sys
 
-def get_freq_list():
+def get_freq_list(audio_file):
     chunk = 2048
 
     # open up a wave
-    audio_file = sys.argv[1]
     wf = wave.open(audio_file, 'rb')
     swidth = wf.getsampwidth()
     RATE = wf.getframerate()
@@ -44,11 +44,11 @@ def get_freq_list():
             # find the frequency and output it
             thefreq = (which+x1)*RATE/chunk
             freq_list.append(thefreq)
-            print("%f" % (thefreq))
+            # print("%f" % (thefreq))
         else:
             thefreq = which*RATE/chunk
             freq_list.append(thefreq)
-            print("%f" % (thefreq))
+            # print("%f" % (thefreq))
         # read some more data
         data = wf.readframes(chunk)
     if data:
@@ -56,3 +56,8 @@ def get_freq_list():
     stream.close()
     p.terminate()
     return freq_list
+
+if __name__ == '__main__':
+    file_name = sys.argv[1]
+    # get_freq_list(file_name)
+    [print("%f" % (thefreq)) for thefreq in get_freq_list(file_name)]
